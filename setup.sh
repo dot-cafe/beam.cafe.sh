@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# Ask user about the domain
+echo 'Which domain should be used for the nginx config?'
+read -r DOMAIN
+
 # Update system
 sudo apt update
 sudo apt upgrade -y
@@ -29,14 +33,14 @@ sudo add-apt-repository universe
 sudo add-apt-repository ppa:certbot/certbot
 sudo apt update
 sudo apt install certbot python-certbot-nginx -y
-sudo certbot certonly --nginx # We already took care of the configuration
+sudo certbot certonly --nginx --cert-name "$DOMAIN"
 
 # Nginx configuration
 echo "$(cat <<EOL
 server {
 	listen 443 ssl http2 default_server;
 	listen [::]:443 ssl http2 default_server;
-	server_name beam.cafe;
+	server_name $DOMAIN;
 	client_max_body_size 0;
 
 	location /ws {
@@ -98,7 +102,7 @@ server {
 	add_header X-XSS-Protection "1; mode=block" always;
 	add_header X-Content-Type-Options "nosniff" always;
 	add_header X-Frame-Options "SAMEORIGIN" always;
-	add_header Content-Security-Policy "default-src wss://beam.cafe 'self' data:;; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; base-uri 'self'; font-src 'self' fonts.gstatic.com; form-action 'none'; object-src 'none'; upgrade-insecure-requests; block-all-mixed-content;" always;
+	add_header Content-Security-Policy "default-src wss://$DOMAIN 'self' data:;; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; base-uri 'self'; font-src 'self' fonts.gstatic.com; form-action 'none'; object-src 'none'; upgrade-insecure-requests; block-all-mixed-content;" always;
 
 	# Close slow connections (in case of a slow loris attack)
 	client_body_timeout 10s;
@@ -107,8 +111,8 @@ server {
 	send_timeout 10s;
 
 	# SSL
-	ssl_certificate /etc/letsencrypt/live/beam.cafe/fullchain.pem;
-	ssl_certificate_key /etc/letsencrypt/live/beam.cafe/privkey.pem;
+	ssl_certificate /etc/letsencrypt/live/$DOMAIN/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/$DOMAIN/privkey.pem;
 	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
 	# Gzip fallback
@@ -121,16 +125,16 @@ server {
 
 server {
 	listen 80;
-	server_name beam.cafe;
+	server_name $DOMAIN;
 
-	if (\$host = beam.cafe) {
+	if (\$host = $DOMAIN) {
 		return 301 https://\$host\$request_uri;
 	}
 
 	return 404;
 }
 EOL
-)" | sudo tee /etc/nginx/conf.d/beam.cafe.conf
+)" | sudo tee /etc/nginx/conf.d/"$DOMAIN".conf
 
 # Enable and start nginx
 sudo systemctl enable nginx
@@ -142,7 +146,7 @@ sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
 echo "y" | sudo ufw enable
 
-# Setup nvm and install node
+# Install node
 cd ~
 curl -sL https://deb.nodesource.com/setup_13.x | sudo bash
 sudo apt install nodejs -y

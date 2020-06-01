@@ -17,7 +17,7 @@
 ---
 #### One-Command automated install
 
-Beam.cafe can be installed using the following command:
+A production-ready beam.cafe can be installed using the following command:
 
 ```sh
 curl -sSL https://raw.githubusercontent.com/dot-cafe/beam.cafe.sh/master/setup.sh | bash
