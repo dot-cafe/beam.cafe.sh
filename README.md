@@ -31,7 +31,7 @@ This repository contains shell scripts to set up beam.cafe on Ubuntu.
 | Script | Description |
 | ------ | ----------- |
 | [`setup.sh`](setup.sh) | Installs all required dependencies on the target machine and sets up both front- and backend of [beam.cafe](http://beam.cafe). It's interactive and requires you to provide informations such as domain name etc. ([certbot](https://certbot.eff.org/)) |
-| [`update.backend.sh`](utils/update.backend.sh) | Used in CD to update the backend. |
-| [`update.frontend.sh`](utils/update.frontend.sh) | Used in CD to update the frontend. |
+| [`utils/update.backend.sh`](utils/update.backend.sh) | Used in CD to update the backend. |
+| [`utils/update.frontend.sh`](utils/update.frontend.sh) | Used in CD to update the frontend. |
 | [`tools/setup.brotli.sh`](scripts/setup.brotli.sh) | Utility script to set up the [brotli module](https://docs.nginx.com/nginx/admin-guide/dynamic-modules/brotli/) on nginx. Brotli is more dense than GZip and provides a higher compression rate. |
 

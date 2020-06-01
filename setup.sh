@@ -71,12 +71,12 @@ server {
 	}
 
 	# Redirect on not-found / no-access
-    location @400 {
-        return 301 https://$host;
-    }
+	location @400 {
+		return 301 https://$host;
+	}
 
-    # Custom error pages
-    error_page 404 403 = @400;
+	# Custom error pages
+	error_page 404 403 = @400;
 
 	# Restrict ssl protocols, ciphers
 	ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -167,3 +167,8 @@ mv beam.cafe/dist/* beam.cafe.www/
 # Start api as pm2 process
 pm2 start beam.cafe.backend/dist/src/app.js --name beam.cafe.backend
 
+# Download utility scripts
+echo 'Download utility scripts...'
+curl -sS -o update.backend.sh https://raw.githubusercontent.com/dot-cafe/beam.cafe.sh/master/utils/update.backend.sh
+curl -sS -o update.frontend.sh https://raw.githubusercontent.com/dot-cafe/beam.cafe.sh/master/utils/update.frontend.sh
+echo 'Done!'
