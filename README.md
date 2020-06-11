@@ -69,7 +69,7 @@ server {
 		proxy_read_timeout 86400;
 	}
 
-	location ~ ^/(file|stream|d) {
+	location ~ ^/(file|stream|d|ta) {
 		proxy_buffering off;
 		proxy_request_buffering off;
 		proxy_pass http://localhost:8080\$request_uri;
@@ -119,7 +119,7 @@ server {
 	add_header X-XSS-Protection "1; mode=block" always;
 	add_header X-Content-Type-Options "nosniff" always;
 	add_header X-Frame-Options "SAMEORIGIN" always;
-	add_header Content-Security-Policy "default-src wss://$DOMAIN 'self' data:;; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; base-uri 'self'; font-src 'self' fonts.gstatic.com; form-action 'none'; object-src 'none'; upgrade-insecure-requests; block-all-mixed-content;" always;
+	add_header Content-Security-Policy "default-src wss://beam.cafe 'self' data:; script-src 'self'; style-src 'self' fonts.googleapis.com; base-uri 'self'; font-src 'self' fonts.gstatic.com; form-action 'none'; object-src 'none'; upgrade-insecure-requests; block-all-mixed-content;" always;
 
 	# Close slow connections (in case of a slow loris attack)
 	client_body_timeout 10s;
