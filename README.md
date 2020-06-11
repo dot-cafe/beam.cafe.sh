@@ -69,7 +69,7 @@ server {
 		proxy_read_timeout 86400;
 	}
 
-	location ~ ^/(file|stream|d|ta) {
+	location ~ ^/(d|b) {
 		proxy_buffering off;
 		proxy_request_buffering off;
 		proxy_pass http://localhost:8080\$request_uri;
