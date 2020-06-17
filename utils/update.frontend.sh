@@ -3,7 +3,7 @@ set -e
 
 # Update git repo and build
 cd ~/beam.cafe
-git fetch --all
+git fetch origin --tags --force
 git reset --hard origin/master
 npm install
 npm run build
