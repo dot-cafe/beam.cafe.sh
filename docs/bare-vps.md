@@ -43,24 +43,26 @@ server {
 	server_name $DOMAIN;
 	client_max_body_size 0;
 
-    # Websocket endpoint
+	# Websocket endpoint
 	location /ws {
-		proxy_pass http://localhost:8080;
 		proxy_http_version 1.1;
 		proxy_set_header Host \$host;
 		proxy_set_header Upgrade \$http_upgrade;
 		proxy_set_header Connection "upgrade";
 		proxy_read_timeout 86400;
+		proxy_set_header X-Forwarded-For $remote_addr;
+		proxy_pass http://localhost:8080;
 	}
 
-    # Download-link and backend endpoint
+	# Download-link and backend endpoint
 	location ~ ^/(d|b) {
 		proxy_buffering off;
 		proxy_request_buffering off;
+		proxy_set_header X-Forwarded-For $remote_addr;
 		proxy_pass http://localhost:8080\$request_uri;
 	}
 
-    # Custom headers for webapp-related files
+	# Custom headers for webapp-related files
 	location ~ (precache-manifest.*|service-worker|sw)\.js {
 		add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
 		expires off;
@@ -68,7 +70,7 @@ server {
 		root /home/ubuntu/beam.cafe.www;
 	}
 
-    # Static frontend
+	# Static frontend
 	location / {
 		sendfile on;
 		sendfile_max_chunk 1m;
