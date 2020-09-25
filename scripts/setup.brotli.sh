@@ -26,13 +26,11 @@ sudo cp objs/*.so /etc/nginx/modules
 sudo chmod 644 /etc/nginx/modules/*.so
 
 # Update nginx config
-echo "
-# Brotli modules
+echo "# Brotli modules
 load_module modules/ngx_http_brotli_filter_module.so;
 load_module modules/ngx_http_brotli_static_module.so;
 
-$(cat /etc/nginx/nginx.conf)
-" | sudo tee /etc/nginx/nginx.conf
+$(cat /etc/nginx/nginx.conf)" | sudo tee /etc/nginx/nginx.conf
 
 # Test config and restart nginx
 sudo nginx -t

@@ -16,12 +16,7 @@
 
 ---
 
-#### Installing beam.cafe on a VPS
-Head to [docs/bare-vps.md](docs/bare-vps.md) if you want to install beam.cafe on an Ubuntu machine.
-
-
-#### Installing beam.cafe using Docker
-To be prepared.
+Util scripts used for the official [beam.cafe](https://beam.cafe) server.
 
 ---
 
